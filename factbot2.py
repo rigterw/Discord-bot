@@ -1,6 +1,7 @@
 from multiprocessing.connection import wait
+from aiohttp import request
 from googletrans import Translator
-import discord, datetime, asyncio
+import discord, datetime, asyncio, json, requests
 from random import randrange as random
 
 
@@ -37,11 +38,22 @@ async def checkFactTime():
             await asyncio.sleep(setTime())
 
 async def sendFact():
-    fact = "hello world"
+    fact = getFact()
     feitje = translator.translate(fact, "nl")
+    print(type(feitje))
     channel = client.get_channel(715680206609973319)
     print(channel)
-    await channel.send(feitje.text)
+    await channel.send("Fact of the day: \n"+feitje.text)
+    print(fact)
+
+def getFact():
+    fact = requests.get("https://api.api-ninjas.com/v1/facts?limit=1", headers={'X-Api-Key': "CB0eucx3lFZayue7aSDJGw==tvtLUMKZp4ygZAPN"})
+    if fact.status_code == requests.codes.ok:
+        json_data = json.loads(fact.text)
+        
+        return json_data[0]['fact']
+    else:
+        return "wessel kan geen goede bots maken"
 
 def setTime():
     currentday = datetime.datetime.now()
@@ -55,6 +67,6 @@ def setTime():
 
 
 
-client.run('OTY0OTM3MTU1MzI1NjA4MDg4.Ylr5wQ.aI_4fq6rTHLDOpqZwjX4It6tXP8')
+client.run(TOKEN)
 print("run")
 
