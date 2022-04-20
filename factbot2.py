@@ -14,10 +14,9 @@ translator = Translator()
 @client.event
 async def on_connect():
 
-    i = 0
-    while i < 10:
+    while True:
         await checkFactTime()
-        i+=1
+
 
 
 
@@ -26,9 +25,12 @@ async def on_message(message):
     if message.author == client.user:
         return
     
-    if message.content == 'hoi':
-        channel = message.channel
-        await channel.send('hoi')
+    channel = message.channel
+    if "miss the old" in message.content:
+        await channel.send('the future is now, old man')
+    
+    if "slecht" in message.content:
+        await channel.send('shut up')
     
 
 
